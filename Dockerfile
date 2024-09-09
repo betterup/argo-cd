@@ -184,10 +184,10 @@ RUN addgroup -g $ARGOCD_USER_ID argocd && \
     apk add git git-lfs nss_wrapper openssl openssh-keysign tini gpg gpg-agent gcompat
 
 COPY --from=argocd --chown=root:root /usr/local/bin/argocd /usr/local/bin/
-COPY --from=argocd --chown=root:root /usr/local/bin/helm* /usr/local/bin/
+# COPY --from=argocd --chown=root:root /usr/local/bin/helm* /usr/local/bin/
 COPY --from=argocd --chown=root:root /usr/local/bin/sops /usr/local/bin/
-COPY --from=argocd --chown=root:root /usr/local/bin/kubectl /usr/local/bin/kubectl
-COPY --from=argocd --chown=root:root /usr/local/bin/kustomize /usr/local/bin/kustomize
+# COPY --from=argocd --chown=root:root /usr/local/bin/kubectl /usr/local/bin/kubectl
+# COPY --from=argocd --chown=root:root /usr/local/bin/kustomize /usr/local/bin/kustomize
 COPY --from=awscli --chown=root:root /usr/local/aws-cli /usr/local/aws-cli
 COPY scripts/* /usr/local/bin/
 
@@ -217,7 +217,7 @@ RUN chmod 750 -R /home/argocd
 
 USER $ARGOCD_USER_ID
 
-RUN helm plugin install --version ${HELM_SECRETS_VERSION} https://github.com/jkroepke/helm-secrets
+# RUN helm plugin install --version ${HELM_SECRETS_VERSION} https://github.com/jkroepke/helm-secrets
 
 USER root
 
