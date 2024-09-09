@@ -8,7 +8,7 @@ ARG BASE_IMAGE=docker.io/library/ubuntu:22.04@sha256:0bced47fffa3361afa981854fca
 FROM docker.io/library/golang:1.22.3 AS builder
 ARG SOPS_VERSION="3.7.6-alpine"
 
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
+# RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     openssh-server \
@@ -30,11 +30,11 @@ WORKDIR /tmp
 COPY hack/install.sh hack/tool-versions.sh ./
 COPY hack/installers installers
 
-RUN ./install.sh helm-linux
-RUN INSTALL_PATH=/usr/local/bin ./install.sh kustomize
-RUN ./install.sh kubectl-linux
+# RUN ./install.sh helm-linux
+# RUN INSTALL_PATH=/usr/local/bin ./install.sh kustomize
+# RUN ./install.sh kubectl-linux
 
-COPY --from=quay.io/getsops/sops:v3.8.1-alpine /usr/local/bin/sops /usr/local/bin/sops
+COPY --from=quay.io/getsops/sops:v3.9.0-alpine /usr/local/bin/sops /usr/local/bin/sops
 
 ####################################################################################################
 # Argo CD Base - used as the base for both the release and dev argocd images
@@ -62,9 +62,9 @@ RUN groupadd -g $ARGOCD_USER_ID argocd && \
 
 COPY hack/gpg-wrapper.sh /usr/local/bin/gpg-wrapper.sh
 COPY hack/git-verify-wrapper.sh /usr/local/bin/git-verify-wrapper.sh
-COPY --from=builder /usr/local/bin/helm /usr/local/bin/helm
-COPY --from=builder /usr/local/bin/kubectl /usr/local/bin/kubectl
-COPY --from=builder /usr/local/bin/kustomize /usr/local/bin/kustomize
+# COPY --from=builder /usr/local/bin/helm /usr/local/bin/helm
+# COPY --from=builder /usr/local/bin/kubectl /usr/local/bin/kubectl
+# COPY --from=builder /usr/local/bin/kustomize /usr/local/bin/kustomize
 COPY --from=builder /usr/local/bin/sops /usr/local/bin/sops
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 # keep uid_entrypoint.sh for backward compatibility
