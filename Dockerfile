@@ -5,7 +5,7 @@ ARG BASE_IMAGE=docker.io/library/ubuntu:22.04@sha256:0bced47fffa3361afa981854fca
 # Also used as the image in CI jobs so needs all dependencies
 ####################################################################################################
 
-FROM docker.io/library/golang:1.21.0@sha256:ec457a2fcd235259273428a24e09900c496d0c52207266f96a330062a01e3622 AS builder
+FROM docker.io/library/golang:1.22.3 AS builder
 ARG SOPS_VERSION="3.7.6-alpine"
 
 RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
@@ -108,7 +108,7 @@ RUN HOST_ARCH=$TARGETARCH NODE_ENV='production' NODE_ONLINE_ENV='online' NODE_OP
 ####################################################################################################
 # Argo CD Build stage which performs the actual build of Argo CD binaries
 ####################################################################################################
-FROM --platform=$BUILDPLATFORM docker.io/library/golang:1.21.0@sha256:ec457a2fcd235259273428a24e09900c496d0c52207266f96a330062a01e3622 AS argocd-build
+FROM --platform=$BUILDPLATFORM docker.io/library/golang:1.22.3 AS argocd-build
 
 WORKDIR /go/src/github.com/argoproj/argo-cd
 
